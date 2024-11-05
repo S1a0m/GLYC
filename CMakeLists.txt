@@ -12,10 +12,34 @@ qt_add_executable(appglyc
     main.cpp
 )
 
+qt_add_resources(appglyc "assets"
+    PREFIX "/"
+    FILES
+        assets/chat.svg
+        assets/encrypted.svg
+        assets/dencrypted.svg
+        assets/morev.svg
+        assets/manage.svg
+        assets/settings.svg
+        assets/usages.svg
+        assets/input-cipher-dial.gif
+)
+
 qt_add_qml_module(appglyc
     URI glyc
     VERSION 1.0
-    QML_FILES Main.qml
+    QML_FILES
+        Main.qml
+        AvailableOptionsDialog.qml
+        ButtonGlyc.qml
+        Chat.qml
+        #uicomponents/ChatList.qml
+        #uicomponents/ChatUser.qml
+        Cipher.qml
+        #uicomponents/DataManagement.qml
+        Decipher.qml
+        #uicomponents/Settings.qml
+        #uicomponents/Usages.qml
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -27,6 +51,7 @@ set_target_properties(appglyc PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+    QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
 )
 
 target_link_libraries(appglyc
