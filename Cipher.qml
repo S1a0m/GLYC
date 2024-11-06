@@ -1,21 +1,36 @@
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
 
 Column {
     spacing: 40
 
     Column {
         spacing: 5
-        TextArea {
-            id: cipherInput
-            // placeholderText: qsTr("Enter the text to enciphe here")
+        ScrollView {
             height: 242
             width: 336
-            wrapMode: Text.Wrap
-            font.pixelSize: 16
-            padding: 10
-            background: Rectangle {
-                color: "#FEFEFE"
+            TextArea {
+                id: cipherInput
+                //placeholderText: qsTr("Enter the text to enciphe here")
+                height: parent.height
+                width: parent.width
+                wrapMode: Text.Wrap
+                font.pixelSize: 16
+                padding: 10
+                topPadding: 20
+                background: Rectangle {
+                    color: "#FEFEFE"
+                }
+            }
+
+            Text {
+                text: "Entrez le texte à chiffrer ici..."
+                color: "gray"
+                visible: cipherInput.text.length === 0
+                font.pixelSize: 16
+                padding: 15
+                topPadding: 20
             }
         }
 
@@ -30,6 +45,10 @@ Column {
             Row {
                 anchors.fill: parent
                 Rectangle {
+                    anchors.verticalCenter: parent.verticalCenter
+                    height: parent.height
+                    width: parent.width - x.width
+                    color: "transparent"
                     Text {
                         anchors.fill: parent
                         id: a
@@ -39,9 +58,15 @@ Column {
                         leftPadding: 30
                         topPadding: 12
                         anchors.verticalCenter: parent.verticalCenter
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: bPropos.open()
+                        }
                     }
                 }
                 ButtonGlyc {
+                    id: x
                     textb: qsTr("Enciphe")
                     anchors.right: parent.right
                 }
@@ -55,6 +80,11 @@ Column {
             sizew: cipherInput.width
             textb: qsTr("Select a file")
             radbord: 54
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: fileDialog.open()
+            }
         }
 
         Rectangle {
@@ -68,8 +98,6 @@ Column {
             }
             Row {
                 anchors.fill: parent
-
-
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     height: parent.height
@@ -103,16 +131,50 @@ Column {
     }
 
     Dialog {
-        id: aPropos
-        modal: true
+        id: bPropos
+        // modal: true
         focus: true
         title: "Available Options"
-        /*x: (window.width - width) / 2
-        y: window.height / 6*/
-        width: Math.min(window.width, window.height) / 3 * 2
-        contentHeight: message.height
-        AvailableOptionsDialog {
-            height: parent.height
+        // contentHeight: message.height
+        height: window.height - 300
+        width: window.width - 30
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        contentItem: AvailableOptionsDialog {
+            id: message
+        }
+    }
+
+    Dialog {
+        id: aPropos
+        // modal: true
+        focus: true
+        title: "Available Options"
+        // contentHeight: message.height
+        height: window.height - 300
+        width: window.width - 30
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        anchors.centerIn: parent
+        contentItem: AvailableOptionsDialog {
+            id: msg
+        }
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Sélectionnez un fichier"
+        //folder: shortcuts.home
+        nameFilters: ["Images (*.png *.jpg *.bmp)", "Tous les fichiers (*)"]
+        //selectExisting: true
+        fileMode: FileDialog.OpenFile
+
+        onAccepted: {
+            console.log("Fichier sélectionné:", fileDialog.selectedFile)
+            // Utilise fileDialog.selectedFile pour obtenir le fichier choisi par l'utilisateur
+        }
+
+        onRejected: {
+            console.log("Sélection annulée")
         }
     }
 }

@@ -23,6 +23,7 @@ qt_add_resources(appglyc "assets"
         assets/settings.svg
         assets/usages.svg
         assets/input-cipher-dial.gif
+        assets/back.svg
 )
 
 qt_add_qml_module(appglyc
